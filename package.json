@@ -4,9 +4,16 @@
   "description": "the extension for azure typespec",
   "publisher": "typespec",
   "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.95.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chunyu3/typespec-azure-vscode.git"
   },
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "extensionDependencies": [
+    "typespec.typespec-vscode"
+  ],
   "categories": [
     "Other"
   ],
@@ -66,6 +73,8 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
+    "build": "npm run compile && npm run package-vsix",
+    "package-vsix": "vsce package",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
@@ -80,6 +89,7 @@
     "eslint": "^9.25.1",
     "typescript": "^5.8.3",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "~3.3.0"
   }
 }

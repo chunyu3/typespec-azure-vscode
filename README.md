@@ -1,71 +1,114 @@
-# typespec-azure-vscode README
+# TypeSpec Azure Extension in Visual Studio Code
 
-This is the README for your extension "typespec-azure-vscode". After writing up a brief description, we recommend including the following sections.
+[Repository](https://github.com/microsoft/typespec) | [Documentation](https://typespec.io/docs) | [Issues](https://github.com/microsoft/typespec/issues) | [Samples](https://github.com/microsoft/typespec/tree/main/packages/samples/specs)
+
+The TypeSpec extension for Visual Studio Code enhances the development of TypeSpec by leveraging VS Code's powerful features. It provides:
+
+- IntelliSense and syntax highlighting
+- Code autocompletion and formatting
+- Live diagnostics and quick fixes
+- Refactoring tools (rename, go-to definition, etc.)
+- Seamless project setup and emitter configuration <_new_>
+- Import TypeSpec from existing OpenAPI 3 definitions <_new_>
+- Emit code from TypeSpec <_new_>
+- Preview API documentation <_new_>
+
+## Prerequisites
+
+Before using the TypeSpec extension, install [Node.js](https://nodejs.org/en/download/) and verify npm is available:
+
+```sh
+npm --version
+```
+
+Install the TypeSpec CLI:
+
+```sh
+npm install -g @typespec/compiler
+```
+
+Other necessary installations will be prompted within the extension as needed.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### Write TypeSpec
 
-For example if there is an image subfolder under your extension project workspace:
+- **IntelliSense & Auto-completion**: Code faster with smart suggestions.
+- **Code Formatting & Folding**: Keep your code clean and organized with built-in formatting and folding support.
+- **Syntax Highlighting**: Clear and readable TypeSpec syntax.
+- **Live Diagnostics**: Get real-time feedback on code issues.
+- **Quick Fixes & Refactoring**: Rename, go-to definition, and format with ease.
+- **Hover Info**: Get detailed information about TypeSpec elements by hovering over them.
 
-\!\[feature X\]\(images/feature-x.png\)
+![vscode.gif](https://raw.githubusercontent.com/microsoft/typespec/main/website/src/content/docs/docs/images/vscode.gif)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### Create TypeSpec Project
 
-## Requirements
+**Create TypeSpec Project**: Easily initialize a new TypeSpec project based on a template, ensuring a structured and ready-to-use setup.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+![vscode_project_scaffolding.gif](https://raw.githubusercontent.com/microsoft/typespec/main/website/src/content/docs/docs/images/vscode_project_scaffolding.gif)
 
-## Extension Settings
+### Emit Code from TypeSpec
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+The extension allows emitting various outputs from TypeSpec:
 
-For example:
+- **OpenAPI Specification**
+- **Server SDKs**: Emit server stubs for different back-end frameworks.
+- **Client SDKs**: Emit client code for multiple languages, including:
+  - .NET (C#)
+  - Python
+  - Java
+  - JavaScript/TypeScript
 
-This extension contributes the following settings:
+The action appears in the context menu on a tsp file. Or invoke `TypeSpec: Emit From TypeSpec` to emit needed outputs:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+![vscode_tsp_to_server_stubs.gif](https://raw.githubusercontent.com/microsoft/typespec/main/website/src/content/docs/docs/images/vscode_tsp_to_server_stubs.gif)
 
-## Known Issues
+### Import TypeSpec from OpenAPI 3
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+The extension supports to import TypeSpec from OpenAPI 3. Invoke `TypeSpec: Import TypeSpec from OpenAPI 3` to begin importing.
 
-## Release Notes
+<!--![vscode_import_tsp_from_openapi3.gif](https://raw.githubusercontent.com/microsoft/typespec/main/website/src/content/docs/docs/images/vscode_import_tsp_from_openapi3.gif)-->
 
-Users appreciate release notes as you update your extension.
+### Preview API Documentation
 
-### 1.0.0
+The extension allows to preview API documentation. The action appears in the context menu on a tsp file. Or invoke `TypeSpec: Preview API Documentation` to visualize your API definitions.
 
-Initial release of ...
+<!--![vscode_preview_api_documentation.gif](https://raw.githubusercontent.com/microsoft/typespec/main/website/src/content/docs/docs/images/vscode_preview_api_documentation.gif)-->
 
-### 1.0.1
+## Commands
 
-Fixed issue #.
+The extension provides the following commands:
 
-### 1.1.0
+| **Command**                                        | **Description**                                                     |
+| -------------------------------------------------- | ------------------------------------------------------------------- |
+| `TypeSpec-azure: Create TypeSpec Project`                | Scaffold a new TypeSpec project.                                    |
+| `TypeSpec-azure: Install TypeSpec Compiler/CLI globally` | Install the TypeSpec Compiler/CLI globally.                         |
+| `TypeSpec-azure: Emit From TypeSpec`                 | Compile and generate from TypeSpec files into the specified output. |
+| `TypeSpec-azure: Restart TypeSpec Server`                | Restart the TypeSpec language server.                               |
+| `TypeSpec-azure: Show Output Channel`                    | Open the TypeSpec output channel to view logs.                      |
+| `TypeSpec-azure: Preview API Documentation`              | Preview API documentation generated from TypeSpec in the workspace. |
+| `TypeSpec-azure: Import TypeSpec from OpenAPI 3`         | Import TypeSpec from existing OpenAPI 3 definitions                 |
 
-Added features X, Y, and Z.
+## Configuration
 
----
+TypeSpec will interpolate a few variables using this pattern `${<name>}`. For example `${workspaceFolder}`.
 
-## Following extension guidelines
+Available variables:
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+- `workspaceFolder`: Correspond to the root of your Visual Studio workspace.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+### `typespec.tsp-server.path`: Configure the server path
 
-## Working with Markdown
+There are cases where the TypeSpec project is located in a subfolder. In such cases, the TypeSpec extension is not able to find the tsp compiler automatically and needs a little guidance.
+This setting provides the ability to configure where the tsp compiler is located.
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+```json
+{
+  "typespec.tsp-server.path": "${workspaceFolder}/my-nested-project/node_modules/@typespec/compiler"
+}
+```
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+## Telemetry
 
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+The TypeSpec Extension for Visual Studio Code collects usage data and sends it to Microsoft to help improve our products and services. Read our [privacy statement](https://privacy.microsoft.com/privacystatement) to learn more. This extension respects the `telemetry.telemetryLevel` setting which you can find more information in the [FAQ](https://code.visualstudio.com/docs/supporting/faq#_how-to-disable-telemetry-reporting) and [Telemetry Data](https://aka.ms/typespec/vscexdata).

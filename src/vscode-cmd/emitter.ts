@@ -25,21 +25,21 @@ export const PreDefinedEmitters: ReadonlyArray<Emitter> = [
     },
     {
       language: "Java",
-      package: "@typespec/http-client-java",
-      sourceRepo: "https://github.com/microsoft/typespec/tree/main/packages/http-client-java",
+      package: "@azure-tools/typespec-java",
+      sourceRepo: "https://github.com/Azure/autorest.java/tree/main/typespec-extension",
       requisites: ["Java 17 or above", "Maven"],
       kind: EmitterKind.Client,
     },
     {
       language: "JavaScript",
-      package: "@typespec/http-client-js",
-      sourceRepo: "https://github.com/microsoft/typespec/tree/main/packages/http-client-js",
+      package: "@azure-tools/typespec-ts",
+      sourceRepo: "https://github.com/Azure/autorest.typescript/tree/main/packages/typespec-ts",
       kind: EmitterKind.Client,
     },
     {
       language: "Python",
-      package: "@typespec/http-client-python",
-      sourceRepo: "https://github.com/microsoft/typespec/tree/main/packages/http-client-python",
+      package: "@azure-tools/typespec-python",
+      sourceRepo: "https://github.com/Azure/autorest.python/tree/main/packages/typespec-python",
       kind: EmitterKind.Client,
     },
     {
