@@ -7,6 +7,7 @@ import { PreDefinedEmitters } from './vscode-cmd/emitter';
 // let client: TspLanguageClient | undefined;
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
+let client: any;
 export async function activate(context: vscode.ExtensionContext) {
 
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
@@ -31,6 +32,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	// }
 	// );
 	const typespecExtension = vscode.extensions.getExtension('typespec.typespec-vscode');
+	let typespecExtensionApis: any;
 	if (typespecExtension) {
 		vscode.window.showInformationMessage('Typespec extension is installed.');
 		// typespecExtension.activate().then(() => {
@@ -47,8 +49,10 @@ export async function activate(context: vscode.ExtensionContext) {
 		// }, (error) => {
 		// 	vscode.window.showErrorMessage('Failed to activate Typespec extension: ' + error);
 		// });
+		
 		await typespecExtension.activate();
-		const client = typespecExtension.exports;
+		typespecExtensionApis = typespecExtension.exports;
+		// await client.emitCodeFunc(undefined, PreDefinedEmitters);
 	} else {
 		vscode.window.showErrorMessage('Typespec extension is not installed. Please install it to use this extension.');
 	}
@@ -59,6 +63,27 @@ export async function activate(context: vscode.ExtensionContext) {
 	// const commands = await vscode.commands.getCommands(true);
 	// vscode.window.showInformationMessage('Available commands: ' + commands.join(', '));
 	/* emit command. */
+	/* reuse the emit code function from typespec extension */
+	// context.subscriptions.push(
+	// 	vscode.commands.registerCommand(CommandName.EmitCode, async (uri: vscode.Uri) => {
+	// 	  await vscode.window.withProgress(
+	// 		{
+	// 		  location: vscode.ProgressLocation.Window,
+	// 		  title: "Emit from TypeSpec Azure...",
+	// 		  cancellable: false,
+	// 		},
+	// 		async () => {
+	// 			await typespecExtensionApis.emitCodeFunc(
+	// 			PreDefinedEmitters,
+	// 			context,
+	// 			uri,
+	// 			undefined,
+	// 		  );
+	// 		},
+	// 	  );
+	// 	}),
+	//   );
+	/* reuse the emit command from typespec extension*/
 	context.subscriptions.push(
 		vscode.commands.registerCommand(CommandName.EmitCode, async (uri: vscode.Uri) => {
 		  await vscode.window.withProgress(
@@ -68,6 +93,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			  cancellable: false,
 			},
 			async () => {
+
 			  vscode.commands.executeCommand(
 				"typespec.emitCode",
 				uri,

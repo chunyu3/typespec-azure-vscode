@@ -1,0 +1,7 @@
+{
+    "AzureOperation": {
+        "prefix": ["azureop", "operation"],
+        "body": "azureop ${1:name}(${2:parameters}:${3:type}): ${0:returnType};",
+        "description": "Operation definition"
+    }
+}
