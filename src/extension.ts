@@ -103,6 +103,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		  );
 		}),
 	  );
+	
+	/* start typespec azure language server */
 }
 
 // This method is called when your extension is deactivated
