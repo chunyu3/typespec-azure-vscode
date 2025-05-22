@@ -1,10 +1,10 @@
 export const enum CommandName {
-    ShowOutputChannel = "typespec.showOutputChannel",
-    RestartServer = "typespec.restartServer",
-    InstallGlobalCompilerCli = "typespec.installGlobalCompilerCli",
+    ShowOutputChannel = "typespec.azure.showOutputChannel",
+    RestartServer = "typespec.azure.restartServer",
+    InstallGlobalCompilerCli = "typespec.azure.installGlobalCompilerCli",
     CreateProject = "typespec.azure.createProject",
-    OpenUrl = "typespec.openUrl",
+    OpenUrl = "typespec.azure.openUrl",
     EmitCode = "typespec.azure.emitCode",
     ImportFromOpenApi3 = "typespec.azure.importFromOpenApi3",
-    ShowOpenApi3 = "typespec..azure.showOpenApi3",
+    ShowOpenApi = "typespec.azure.showOpenApi",
 }

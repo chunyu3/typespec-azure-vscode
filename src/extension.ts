@@ -2,7 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { CommandName } from './type';
-import { PreDefinedEmitters } from './vscode-cmd/emitter';
+import { PreDefinedEmitters } from './vscode-cmd/emit-code/emitter';
+import { getEntrypointTspFile, TraverseMainTspFileInWorkspace } from './typespec-utils';
 
 // let client: TspLanguageClient | undefined;
 // This method is called when your extension is activated
@@ -64,26 +65,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	// vscode.window.showInformationMessage('Available commands: ' + commands.join(', '));
 	/* emit command. */
 	/* reuse the emit code function from typespec extension */
-	// context.subscriptions.push(
-	// 	vscode.commands.registerCommand(CommandName.EmitCode, async (uri: vscode.Uri) => {
-	// 	  await vscode.window.withProgress(
-	// 		{
-	// 		  location: vscode.ProgressLocation.Window,
-	// 		  title: "Emit from TypeSpec Azure...",
-	// 		  cancellable: false,
-	// 		},
-	// 		async () => {
-	// 			await typespecExtensionApis.emitCodeFunc(
-	// 			PreDefinedEmitters,
-	// 			context,
-	// 			uri,
-	// 			undefined,
-	// 		  );
-	// 		},
-	// 	  );
-	// 	}),
-	//   );
-	/* reuse the emit command from typespec extension*/
 	context.subscriptions.push(
 		vscode.commands.registerCommand(CommandName.EmitCode, async (uri: vscode.Uri) => {
 		  await vscode.window.withProgress(
@@ -93,19 +74,54 @@ export async function activate(context: vscode.ExtensionContext) {
 			  cancellable: false,
 			},
 			async () => {
-
-			  vscode.commands.executeCommand(
-				"typespec.emitCode",
-				uri,
+				await typespecExtensionApis.emitCodeFunc(
 				PreDefinedEmitters,
+				context,
+				uri,
+				undefined,
+				getEntrypointTspFiles,
 			  );
 			},
 		  );
 		}),
 	  );
+	/* reuse the emit command from typespec extension*/
+	// context.subscriptions.push(
+	// 	vscode.commands.registerCommand(CommandName.EmitCode, async (uri: vscode.Uri) => {
+	// 	  await vscode.window.withProgress(
+	// 		{
+	// 		  location: vscode.ProgressLocation.Window,
+	// 		  title: "Emit from TypeSpec Azure...",
+	// 		  cancellable: false,
+	// 		},
+	// 		async () => {
+
+	// 		  vscode.commands.executeCommand(
+	// 			"typespec.emitCode",
+	// 			uri,
+	// 			PreDefinedEmitters,
+	// 			getEntrypointTspFiles,
+	// 		  );
+	// 		},
+	// 	  );
+	// 	}),
+	//   );
 	
 	/* start typespec azure language server */
 }
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
+
+async function getEntrypointTspFiles(uri: vscode.Uri): Promise<string[] | undefined> {
+  if (!uri) {
+    return await TraverseMainTspFileInWorkspace();
+  } else {
+    const tspFile = await getEntrypointTspFile(uri.fsPath);
+    if (tspFile) {
+      return [tspFile];
+    } else {
+      return undefined;
+    }
+  }
+}
