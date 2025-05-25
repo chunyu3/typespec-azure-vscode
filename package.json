@@ -1,6 +1,6 @@
 {
   "name": "typespec-azure-vscode",
-  "displayName": "typespec-azure-vscode",
+  "displayName": "typespec azure",
   "description": "the extension for azure typespec",
   "publisher": "typespec",
   "version": "0.0.1",
@@ -78,7 +78,9 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "prettier:fix": "prettier --write --config .prettierrc.json ./src/**/*.ts",
+    "prettier": "prettier --check --config .prettierrc.json ./src/**/*.ts"
   },
   "devDependencies": {
     "@types/vscode": "^1.100.0",
@@ -90,6 +92,7 @@
     "typescript": "^5.8.3",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.5.2",
-    "@vscode/vsce": "~3.3.0"
+    "@vscode/vsce": "~3.3.0",
+    "prettier": "^3.3.3"
   }
 }

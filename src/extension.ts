@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import { CommandName } from './type';
 import { PreDefinedEmitters } from './vscode-cmd/emit-code/emitter';
 import { getEntrypointTspFile, TraverseMainTspFileInWorkspace } from './typespec-utils';
+import { registerInlineCodeCompletion } from './codeCompletion';
 
 // let client: TspLanguageClient | undefined;
 // This method is called when your extension is activated
@@ -32,24 +33,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	// 	}
 	// }
 	// );
+	vscode.commands.executeCommand("setContext", "hideCommand", true);
 	const typespecExtension = vscode.extensions.getExtension('typespec.typespec-vscode');
 	let typespecExtensionApis: any;
 	if (typespecExtension) {
 		vscode.window.showInformationMessage('Typespec extension is installed.');
-		// typespecExtension.activate().then(() => {
-		// 	vscode.window.showInformationMessage('Typespec extension is activated.');
-		// 	// You can now use the Typespec API
-		// 	// For example, you can access the Typespec client
-		// 	const typespecClient = typespecExtension.exports;
-		// 	if (typespecClient) {
-		// 		vscode.window.showInformationMessage('Typespec client is available.');
-		// 		// You can now use the Typespec client
-		// 		// For example, you can access the Typespec API
-		// 		// typespecClient.someMethod();
-		// 	}
-		// }, (error) => {
-		// 	vscode.window.showErrorMessage('Failed to activate Typespec extension: ' + error);
-		// });
 		
 		await typespecExtension.activate();
 		typespecExtensionApis = typespecExtension.exports;
@@ -65,27 +53,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	// vscode.window.showInformationMessage('Available commands: ' + commands.join(', '));
 	/* emit command. */
 	/* reuse the emit code function from typespec extension */
-	context.subscriptions.push(
-		vscode.commands.registerCommand(CommandName.EmitCode, async (uri: vscode.Uri) => {
-		  await vscode.window.withProgress(
-			{
-			  location: vscode.ProgressLocation.Window,
-			  title: "Emit from TypeSpec Azure...",
-			  cancellable: false,
-			},
-			async () => {
-				await typespecExtensionApis.emitCodeFunc(
-				PreDefinedEmitters,
-				context,
-				uri,
-				undefined,
-				getEntrypointTspFiles,
-			  );
-			},
-		  );
-		}),
-	  );
-	/* reuse the emit command from typespec extension*/
 	// context.subscriptions.push(
 	// 	vscode.commands.registerCommand(CommandName.EmitCode, async (uri: vscode.Uri) => {
 	// 	  await vscode.window.withProgress(
@@ -95,23 +62,43 @@ export async function activate(context: vscode.ExtensionContext) {
 	// 		  cancellable: false,
 	// 		},
 	// 		async () => {
-
-	// 		  vscode.commands.executeCommand(
-	// 			"typespec.emitCode",
-	// 			uri,
+	// 			await typespecExtensionApis.emitCodeFunc(
 	// 			PreDefinedEmitters,
+	// 			context,
+	// 			uri,
+	// 			undefined,
 	// 			getEntrypointTspFiles,
 	// 		  );
 	// 		},
 	// 	  );
 	// 	}),
 	//   );
+	/* reuse the emit command from typespec extension*/
+	context.subscriptions.push(
+		vscode.commands.registerCommand(CommandName.EmitCode, async (uri: vscode.Uri) => {
+		  await vscode.window.withProgress(
+			{
+			  location: vscode.ProgressLocation.Window,
+			  title: "Emit from TypeSpec Azure...",
+			  cancellable: false,
+			},
+			async () => {
+
+			  vscode.commands.executeCommand(
+				"typespec.emitCode",
+				uri,
+				PreDefinedEmitters,
+				getEntrypointTspFiles,
+			  );
+			},
+		  );
+		}),
+	  );
 	
 	/* start typespec azure language server */
+	/* register code completion */
+	registerInlineCodeCompletion(context);
 }
-
-// This method is called when your extension is deactivated
-export function deactivate() {}
 
 async function getEntrypointTspFiles(uri: vscode.Uri): Promise<string[] | undefined> {
   if (!uri) {
@@ -124,4 +111,9 @@ async function getEntrypointTspFiles(uri: vscode.Uri): Promise<string[] | undefi
       return undefined;
     }
   }
+}
+
+// This method is called when your extension is deactivated
+export function deactivate() {
+	vscode.commands.executeCommand("setContext", "hideCommand", false);
 }
