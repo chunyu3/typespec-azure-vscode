@@ -20,7 +20,8 @@
   "activationEvents": [
     "onStartupFinished"
   ],
-  "main": "./dist/extension.js",
+  "type": "module",
+  "main": "./dist/src/extension.js",
   "contributes": {
     "commands": [
       {
@@ -72,7 +73,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
+    "compile": "tsx ./scripts/build.ts",
     "build": "npm run compile && npm run package-vsix",
     "package-vsix": "vsce package",
     "watch": "tsc -watch -p ./",
@@ -93,6 +94,8 @@
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "~3.3.0",
+    "esbuild": "^0.25.1",
+    "tsx": "^4.19.3",
     "prettier": "^3.3.3"
   }
 }

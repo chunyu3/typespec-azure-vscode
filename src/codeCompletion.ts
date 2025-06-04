@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { TYPESPEC_CODE_COMPLETE_SYSTEM_PROMPT } from "./ai/prompt";
+import { TYPESPEC_CODE_COMPLETE_SYSTEM_PROMPT } from "./ai/prompt.js";
 import { readFile } from "fs/promises";
 export function registerInlineCodeCompletion(
   vscontext: vscode.ExtensionContext
@@ -23,7 +23,7 @@ export function registerInlineCodeCompletion(
             });
             // init the chat message
             const fullExampleDoc = await readFile(
-              vscontext.asAbsolutePath("src/ai/azure/step05.fullexample.md")
+              vscontext.asAbsolutePath("ai/azure/step05.fullexample.md")
             );
             const exampleMsg = `Following is the basic guidance for defining full example in Azure Service:\n ------------------- \n ${fullExampleDoc} \n ------------------- \n`;
             const prompte = `Here is the current code I'm working on:\n----------------------\n ${document.getText(new vscode.Range(new vscode.Position(0, 0), position))}\n---------------------------\nPlease suggest the next lines of code without repeating the current line.`;
@@ -57,6 +57,9 @@ export function registerInlineCodeCompletion(
             }
           } catch (error) {
             console.error("Error providing inline completion items:", error);
+            vscode.window.showErrorMessage(
+              `Error providing inline completion items: ${error}`
+            );
           }
 
           return inlineCompletionItems;
